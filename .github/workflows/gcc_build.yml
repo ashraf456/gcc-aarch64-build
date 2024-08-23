@@ -19,5 +19,4 @@ jobs:
 
       - name: Build AArch64 GCC
         run: |
-          docker run --rm -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static -t gcc-aarch64-image .
-      
+          docker run --rm -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static -t gcc-aarch64-image /bin/bash -c "docker build -t gcc-aarch64-image ."
