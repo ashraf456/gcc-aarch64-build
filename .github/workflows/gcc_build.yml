@@ -19,7 +19,7 @@ jobs:
 
       - name: Download GCC source code
         run: |
-          wget https://ftp.gnu.org/gnu/gcc/gcc-14..0/gcc-14.1.0.tar.xz
+          wget https://ftp.gnu.org/gnu/gcc/gcc-14.1.0/gcc-14.1.0.tar.xz
           tar -xvf gcc-14.1.0.tar.xz
           cd gcc-14.1.0
 
