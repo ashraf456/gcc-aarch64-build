@@ -27,22 +27,28 @@ jobs:
         run: |
          cd ./gcc-14.1.0
           mkdir build
-          cd build
-          ../configure --target=aarch64-linux-gnu --host=x86_64-linux-gnu --build=x86_64-linux-gnu --prefix=/data/data/com.vectras.boxvidra/files/usr/glibc --disable-multilib --enable-languages=c,c++,fortran --disable-bootstrap \
-                --disable-nls \
-                --enable-default-pie \
-                --with-system-zlib \
-                --enable-__cxa_atexit \
-                --enable-linker-build-id \
-                --enable-plugin \
-                --with-linker-hash-style=gnu \
-                --enable-gnu-indirect-function \
-                --disable-werror \
-                --disable-checking \
-                --disable-static \                                                --enable-host-shared \
-                --disable-libssp \
-                --disable-libstdcxx-pch \
-          make -j4
+           cd build
+          ../configure --target=aarch64-linux-gnu \
+          --host=x86_64-linux-gnu \
+          --build=x86_64-linux-gnu \
+          --prefix=/data/data/com.vectras.boxvidra/files/usr/glibc \
+          --disable-multilib \
+          --enable-languages=c,c++,fortran \
+          --disable-bootstrap \
+          --disable-nls \
+          --enable-default-pie \
+          --with-system-zlib \
+          --enable-__cxa_atexit \
+          --enable-linker-build-id \
+          --enable-plugin \
+          --with-linker-hash-style=gnu \
+          --enable-gnu-indirect-function \
+          --disable-werror \
+          --disable-checking \
+          --disable-static \                                                --enable-host-shared \
+          --disable-libssp \
+          --disable-libstdcxx-pch \
+          make -j$(nproc)
           make install
 
       - name: Package GCC
