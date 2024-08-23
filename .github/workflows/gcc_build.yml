@@ -29,8 +29,7 @@ jobs:
           sudo chmod -R 755 /data/data/com.vectras.boxvidra/files/usr/glibc
       - name: Installing cross toolchain for gcc 
         run: |
-          sudo apt-get install binutils-aarch64-linux-gnu pkg-config-aarch64-linux-gnu gcc-10-aarch64-linux-gnu
-           g++-10-aarch64-linux-gnu
+          sudo apt-get install binutils-aarch64-linux-gnu gcc-10-aarch64-linux-gnu g++-10-aarch64-linux-gnu
       - name: Configure and build GCC
         run: |
           cd ./gcc-14.1.0
