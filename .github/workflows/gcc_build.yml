@@ -27,6 +27,9 @@ jobs:
       - name: Set permissions of prefix directory
         run: |
           sudo chmod -R 755 /data/data/com.vectras.boxvidra/files/usr/glibc
+      - name: Installing binutils for gcc 
+        run: |
+          sudo apt-get install binutils-aarch64-linux-gnu
       - name: Configure and build GCC
         run: |
           cd ./gcc-14.1.0
