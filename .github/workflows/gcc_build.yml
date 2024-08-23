@@ -29,7 +29,10 @@ jobs:
           sudo chmod -R 755 /data/data/com.vectras.boxvidra/files/usr/glibc
       - name: Installing cross toolchain for gcc 
         run: |
-          sudo apt-get install binutils-aarch64-linux-gnu gcc-10-aarch64-linux-gnu g++-10-aarch64-linux-gnu
+          sudo apt-get install gcc-10-aarch64-linux-gnu g++-10-aarch64-linux-gnu
+      - name: symbolic link for gcc to slove error
+        run: |
+          sudo ln -s /usr/bin/aarch64-linux-gnu-gcc-10 /usr/bin/aarch64-linux-gnu-gcc
       - name: Configure and build GCC
         run: |
           cd ./gcc-14.1.0
