@@ -7,28 +7,17 @@ on:
 
 jobs:
   build-gcc:
-    runs-on: self-hosted
-    strategy:
-      matrix:
-        os: [aarch64]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Docker
+      - name: Install QEMU
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker.io
-          sudo systemctl start docker
-          sudo systemctl enable docker
- 
+          sudo apt-get install -y qemu-user-static
+
       - name: Build AArch64 GCC
         run: |
-          docker build \
-            --build-arg GCC_VERSION=${{ secrets.GCC_VERSION }} \
-            --build-arg PREFIX=${{ secrets.PREFIX }} \
-            -t gcc-aarch64-image .
-
-      - name: Run AArch64 GCC
-        run: |
-          docker run -it gcc-aarch64-image
+          docker run --rm -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static -t gcc-aarch64-image .
+      
