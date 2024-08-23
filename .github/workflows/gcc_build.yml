@@ -1,0 +1,24 @@
+name: Build AArch64 GCC
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-gcc:
+    runs-on: ubuntu-aarch64-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build AArch64 GCC
+        run: |
+          docker build \
+            --build-arg GCC_VERSION=${{ secrets.GCC_VERSION }} \
+            --build-arg PREFIX=${{ secrets.PREFIX }} \
+            -t gcc-aarch64-image .
+
+      - name: Run AArch64 GCC
+        run: |
+          docker run -it gcc-aarch64-image
