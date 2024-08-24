@@ -58,6 +58,9 @@ jobs:
             --disable-static \
             --enable-host-shared \
             --disable-libssp \
+            --with-gmp=/usr \
+            --with-mpfr=/usr \
+            --with-mpc=/usr \
             --disable-libstdcxx-pch
           make -j$(nproc)
           make install
