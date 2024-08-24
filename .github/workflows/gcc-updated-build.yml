@@ -45,8 +45,8 @@ jobs:
           mkdir build
           cd build
           sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX1
-          make -j$(nproc)
-          make install
+          sudo make -j$(nproc)
+          sudo make install
           cd ../../
 
       - name: Build and install MPFR for AArch64
