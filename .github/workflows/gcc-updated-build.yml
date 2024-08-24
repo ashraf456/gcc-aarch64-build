@@ -45,9 +45,9 @@ jobs:
           cd gmp-6.2.1
           mkdir build
           cd build
-          sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX1 --libdir=$PREFIX1/lib
+          sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib
           sudo make -j$(nproc)
-          sudo make install DESTDIR=$PREFIX1
+          sudo make install DESTDIR
           cd ../../
 
       - name: Build and install MPFR for AArch64
@@ -57,9 +57,10 @@ jobs:
           cd mpfr-4.1.0
           mkdir build
           cd build
-          sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX1 --libdir=$PREFIX1/lib
+          export GMP_DIR=$DESTDIR/lib
+          sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib
           make -j$(nproc)
-          make install DESTDIR=$PREFIX1
+          make install DESTDIR
           cd ../../
 
       - name: Build and install MPC for AArch64
@@ -69,9 +70,9 @@ jobs:
           cd mpc-1.2.1
           mkdir build
           cd build
-          sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX1 --libdir=$PREFIX1/lib
+          sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib
           make -j$(nproc)
-          make install DESTDIR=$PREFIX1
+          make install DESTDIR
           cd ../../
 
       - name: Configure and build GCC
@@ -79,9 +80,9 @@ jobs:
           cd gcc-14.1.0
           mkdir build
           cd build
-          sudo ../configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX1 --libdir=$PREFIX1/lib --disable-multilib --enable-languages=c,c++,fortran --disable-bootstrap --disable-nls --enable-default-pie --with-system-zlib --enable-__cxa_atexit --enable-linker-build-id --enable-plugin --with-linker-hash-style=gnu --enable-gnu-indirect-function --disable-werror --disable-checking --disable-static --enable-host-shared --disable-libssp --disable-libstdcxx-pch
+          sudo ../configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=DESTDIR/lib --disable-multilib --enable-languages=c,c++,fortran --disable-bootstrap --disable-nls --enable-default-pie --with-system-zlib --enable-__cxa_atexit --enable-linker-build-id --enable-plugin --with-linker-hash-style=gnu --enable-gnu-indirect-function --disable-werror --disable-checking --disable-static --enable-host-shared --disable-libssp --disable-libstdcxx-pch
           make -j$(nproc)
-          make install DESTDIR=$PREFIX1
+          make install DESTDIR
 
       - name: Package GCC
         run: |
