@@ -33,6 +33,7 @@ jobs:
       - name: Set prefix
         run: |
           export PREFIX1=/data/data/com.vectras.boxvidra/files/usr/glibc
+          export DESTDIR=$PREFIX1
           sudo mkdir -p $PREFIX1
           sudo chown -R $USER:$USER $PREFIX1
           sudo chmod -R 755 $PREFIX1
@@ -51,7 +52,7 @@ jobs:
 
       - name: Build and install MPFR for AArch64
         run: |
-          wget https://www.mpfr.org/mpfr/mpfr-4.1.0.tar.xz
+          wget https://ftp.gnu.org/gnu/mpfr/mpfr-4.1.0.tar.xz
           tar -xvf mpfr-4.1.0.tar.xz
           cd mpfr-4.1.0
           mkdir build
