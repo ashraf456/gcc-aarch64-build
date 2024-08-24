@@ -17,16 +17,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential bison flex texinfo
+           apt-get update
+           apt-get install -y build-essential bison flex texinfo
 
       - name: Installing cross toolchain for gcc
         run: |
-          sudo apt-get install gcc-10-aarch64-linux-gnu g++-10-aarch64-linux-gnu
+           apt-get install gcc-10-aarch64-linux-gnu g++-10-aarch64-linux-gnu
 
       - name: symbolic link for gcc to solve error
         run: |
-          sudo ln -s /usr/bin/aarch64-linux-gnu-gcc-10 /usr/bin/aarch64-linux-gnu-gcc
+           ln -s /usr/bin/aarch64-linux-gnu-gcc-10 /usr/bin/aarch64-linux-gnu-gcc
 
       - name: Download GCC source code
         run: |
@@ -37,9 +37,9 @@ jobs:
         run: |
           export PREFIX1=/data/data/com.vectras.boxvidra/files/usr/glibc
           export DESTDIR=$PREFIX1
-          sudo mkdir -p $PREFIX1
-          sudo chown -R $USER:$USER $PREFIX1
-          sudo chmod -R 755 $PREFIX1
+           mkdir -p $PREFIX1
+           chown -R $USER:$USER $PREFIX1
+           chmod -R 755 $PREFIX1
 
       - name: Build and install GMP for AArch64
         run: |
@@ -48,9 +48,9 @@ jobs:
           cd gmp-6.2.1
           mkdir build
           cd build
-          sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib
-          sudo make -j$(nproc)
-          sudo DESTDIR=$DESTDIR make install
+           ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib
+           make -j$(nproc)
+           DESTDIR=$DESTDIR make install
           cd ../../
 
       - name: Build and install MPFR for AArch64
@@ -61,9 +61,9 @@ jobs:
           mkdir build
           cd build
           export GMP_DIR=$DESTDIR/lib
-          sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib
-          sudo make -j$(nproc)
-          sudo DESTDIR=$DESTDIR make install
+           ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib
+           make -j$(nproc)
+           DESTDIR=$DESTDIR make install
           cd ../../
 
       - name: Build and install MPC for AArch64
@@ -73,9 +73,9 @@ jobs:
           cd mpc-1.2.1
           mkdir build
           cd build
-          sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib
-          sudo make -j$(nproc)
-          sudo DESTDIR=$DESTDIR make install
+           ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib
+           make -j$(nproc)
+           DESTDIR=$DESTDIR make install
           cd ../../
 
       - name: Configure and build GCC
@@ -83,9 +83,9 @@ jobs:
           cd gcc-14.1.0
           mkdir build
           cd build
-          sudo ../configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib --disable-multilib --enable-languages=c,c++,fortran --disable-bootstrap --disable-nls --enable-default-pie --with-system-zlib --enable-__cxa_atexit --enable-linker-build-id --enable-plugin --with-linker-hash-style=gnu --enable-gnu-indirect-function --disable-werror --disable-checking --disable-static --enable-host-shared --disable-libssp --disable-libstdcxx-pch
-          sudo make -j$(nproc)
-          sudo DESTDIR=$DESTDIR make install
+           ../configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib --disable-multilib --enable-languages=c,c++,fortran --disable-bootstrap --disable-nls --enable-default-pie --with-system-zlib --enable-__cxa_atexit --enable-linker-build-id --enable-plugin --with-linker-hash-style=gnu --enable-gnu-indirect-function --disable-werror --disable-checking --disable-static --enable-host-shared --disable-libssp --disable-libstdcxx-pch
+           make -j$(nproc)
+           DESTDIR=$DESTDIR make install
 
       - name: Package GCC
         run: |
