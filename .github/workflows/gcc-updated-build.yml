@@ -32,10 +32,10 @@ jobs:
 
       - name: Set prefix
         run: |
-          export PREFIX=/data/data/com.vectras.boxvidra/files/usr/glibc
-          sudo mkdir -p $PREFIX
-          sudo chown -R $USER:$USER $PREFIX
-          sudo chmod -R 755 $PREFIX
+          export PREFIX1=/data/data/com.vectras.boxvidra/files/usr/glibc
+          sudo mkdir -p $PREFIX1
+          sudo chown -R $USER:$USER $PREFIX1
+          sudo chmod -R 755 $PREFIX1
 
       - name: Build and install GMP for AArch64
         run: |
@@ -44,7 +44,7 @@ jobs:
           cd gmp-6.2.1
           mkdir build
           cd build
-          ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX
+          ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX1
           make -j$(nproc)
           make install
           cd ../../
@@ -56,7 +56,7 @@ jobs:
           cd mpfr-4.1.0
           mkdir build
           cd build
-          ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX
+          ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX1
           make -j$(nproc)
           make install
           cd ../../
@@ -68,7 +68,7 @@ jobs:
           cd mpc-1.2.1
           mkdir build
           cd build
-          ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX
+          ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX1
           make -j$(nproc)
           make install
           cd ../../
@@ -78,17 +78,17 @@ jobs:
           cd gcc-14.1.0
           mkdir build
           cd build
-          ../configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX --disable-multilib --enable-languages=c,c++,fortran --disable-bootstrap --disable-nls --enable-default-pie --with-system-zlib --enable-__cxa_atexit --enable-linker-build-id --enable-plugin --with-linker-hash-style=gnu --enable-gnu-indirect-function --disable-werror --disable-checking --disable-static --enable-host-shared --disable-libssp --disable-libstdcxx-pch
+          ../configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX1 --disable-multilib --enable-languages=c,c++,fortran --disable-bootstrap --disable-nls --enable-default-pie --with-system-zlib --enable-__cxa_atexit --enable-linker-build-id --enable-plugin --with-linker-hash-style=gnu --enable-gnu-indirect-function --disable-werror --disable-checking --disable-static --enable-host-shared --disable-libssp --disable-libstdcxx-pch
           make -j$(nproc)
           make install
 
       - name: Package GCC
         run: |
-          cd $PREFIX
+          cd $PREFIX1
           tar -czvf gcc-aarch64.tar.gz .
 
       - name: Upload GCC package
         uses: actions/upload-artifact@v3
         with:
           name: gcc-aarch64
-          path: $PREFIX/gcc-aarch64.tar.gz
+          path: $PREFIX1/gcc-aarch64.tar.gz
