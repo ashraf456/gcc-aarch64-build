@@ -1,4 +1,5 @@
 name: Build AArch64 GCC
+
 on:
   push:
     branches:
@@ -7,6 +8,9 @@ on:
 jobs:
   build-gcc:
     runs-on: ubuntu-latest
+    container:
+      image: ubuntu:24.04
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -15,15 +19,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential bison flex texinfo
-   
-      - name: Installing cross toolchain for gcc 
+
+      - name: Installing cross toolchain for gcc
         run: |
           sudo apt-get install gcc-10-aarch64-linux-gnu g++-10-aarch64-linux-gnu
-     
-      - name: symbolic link for gcc to slove error
+
+      - name: symbolic link for gcc to solve error
         run: |
           sudo ln -s /usr/bin/aarch64-linux-gnu-gcc-10 /usr/bin/aarch64-linux-gnu-gcc
-
 
       - name: Download GCC source code
         run: |
@@ -47,7 +50,7 @@ jobs:
           cd build
           sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib
           sudo make -j$(nproc)
-          sudo DESTDIR=$DESTDIR make install 
+          sudo DESTDIR=$DESTDIR make install
           cd ../../
 
       - name: Build and install MPFR for AArch64
@@ -72,7 +75,7 @@ jobs:
           cd build
           sudo ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib
           sudo make -j$(nproc)
-          sudo DESTDIR=$DESTDIR make install 
+          sudo DESTDIR=$DESTDIR make install
           cd ../../
 
       - name: Configure and build GCC
@@ -80,17 +83,17 @@ jobs:
           cd gcc-14.1.0
           mkdir build
           cd build
-          sudo ../configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=DESTDIR/lib --disable-multilib --enable-languages=c,c++,fortran --disable-bootstrap --disable-nls --enable-default-pie --with-system-zlib --enable-__cxa_atexit --enable-linker-build-id --enable-plugin --with-linker-hash-style=gnu --enable-gnu-indirect-function --disable-werror --disable-checking --disable-static --enable-host-shared --disable-libssp --disable-libstdcxx-pch
+          sudo ../configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$DESTDIR --libdir=$DESTDIR/lib --disable-multilib --enable-languages=c,c++,fortran --disable-bootstrap --disable-nls --enable-default-pie --with-system-zlib --enable-__cxa_atexit --enable-linker-build-id --enable-plugin --with-linker-hash-style=gnu --enable-gnu-indirect-function --disable-werror --disable-checking --disable-static --enable-host-shared --disable-libssp --disable-libstdcxx-pch
           sudo make -j$(nproc)
-          sudo DESTDIR=$DESTDIR make install 
+          sudo DESTDIR=$DESTDIR make install
 
       - name: Package GCC
         run: |
-          cd $PREFIX1
+          cd $DESTDIR
           tar -czvf gcc-aarch64.tar.gz .
 
       - name: Upload GCC package
         uses: actions/upload-artifact@v3
         with:
           name: gcc-aarch64
-          path: $PREFIX1/gcc-aarch64.tar.gz
+          path: $DESTDIR/gcc-aarch64.tar.gz
