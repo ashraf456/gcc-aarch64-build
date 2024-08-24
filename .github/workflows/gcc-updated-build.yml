@@ -22,7 +22,7 @@ jobs:
 
       - name: Installing cross toolchain for gcc
         run: |
-           apt-get install gcc-10-aarch64-linux-gnu g++-10-aarch64-linux-gnu
+           apt-get install -y gcc-10-aarch64-linux-gnu g++-10-aarch64-linux-gnu
 
       - name: symbolic link for gcc to solve error
         run: |
