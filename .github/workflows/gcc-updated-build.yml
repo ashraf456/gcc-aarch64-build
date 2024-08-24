@@ -33,7 +33,7 @@ jobs:
       - name: Set prefix
         run: |
           export PREFIX=/data/data/com.vectras.boxvidra/files/usr/glibc
-          mkdir -p $PREFIX
+          sudo mkdir -p $PREFIX
           sudo chown -R $USER:$USER $PREFIX
           sudo chmod -R 755 $PREFIX
 
