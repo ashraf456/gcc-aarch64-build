@@ -1,0 +1,95 @@
+name: Build AArch64 GCC
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-gcc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential bison flex texinfo
+   
+      - name: Installing cross toolchain for gcc 
+        run: |
+          sudo apt-get install gcc-10-aarch64-linux-gnu g++-10-aarch64-linux-gnu
+     
+      - name: symbolic link for gcc to slove error
+        run: |
+          sudo ln -s /usr/bin/aarch64-linux-gnu-gcc-10 /usr/bin/aarch64-linux-gnu-gcc
+      
+
+      - name: Download GCC source code
+        run: |
+          wget https://ftp.gnu.org/gnu/gcc/gcc-14.1.0/gcc-14.1.0.tar.xz
+          tar -xvf gcc-14.1.0.tar.xz
+
+      - name: Set prefix
+        run: |
+          export PREFIX=/data/data/com.vectras.boxvidra/files/usr/glibc
+          mkdir -p $PREFIX
+          sudo chown -R $USER:$USER $PREFIX
+          sudo chmod -R 755 $PREFIX
+
+      - name: Build and install GMP for AArch64
+        run: |
+          wget https://gmplib.org/download/gmp/gmp-6.2.1.tar.xz
+          tar -xvf gmp-6.2.1.tar.xz
+          cd gmp-6.2.1
+          mkdir build
+          cd build
+          ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX
+          make -j$(nproc)
+          make install
+          cd ../../
+
+      - name: Build and install MPFR for AArch64
+        run: |
+          wget https://www.mpfr.org/mpfr-current/mpfr-4.1.0.tar.xz
+          tar -xvf mpfr-4.1.0.tar.xz
+          cd mpfr-4.1.0
+          mkdir build
+          cd build
+          ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX
+          make -j$(nproc)
+          make install
+          cd ../../
+
+      - name: Build and install MPC for AArch64
+        run: |
+          wget https://ftp.gnu.org/gnu/mpc/mpc-1.2.1.tar.gz
+          tar -xvf mpc-1.2.1.tar.gz
+          cd mpc-1.2.1
+          mkdir build
+          cd build
+          ../configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX
+          make -j$(nproc)
+          make install
+          cd ../../
+
+      - name: Configure and build GCC
+        run: |
+          cd gcc-14.1.0
+          mkdir build
+          cd build
+          ../configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=$PREFIX --disable-multilib --enable-languages=c,c++,fortran --disable-bootstrap --disable-nls --enable-default-pie --with-system-zlib --enable-__cxa_atexit --enable-linker-build-id --enable-plugin --with-linker-hash-style=gnu --enable-gnu-indirect-function --disable-werror --disable-checking --disable-static --enable-host-shared --disable-libssp --disable-libstdcxx-pch
+          make -j$(nproc)
+          make install
+
+      - name: Package GCC
+        run: |
+          cd $PREFIX
+          tar -czvf gcc-aarch64.tar.gz .
+
+      - name: Upload GCC package
+        uses: actions/upload-artifact@v3
+        with:
+          name: gcc-aarch64
+          path: $PREFIX/gcc-aarch64.tar.gz
