@@ -1,4 +1,4 @@
-name: Build AArch64 GCC
+-name: Build AArch64 GCC
 
 on:
   push:
