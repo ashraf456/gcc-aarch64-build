@@ -23,7 +23,7 @@ jobs:
       - name: symbolic link for gcc to slove error
         run: |
           sudo ln -s /usr/bin/aarch64-linux-gnu-gcc-10 /usr/bin/aarch64-linux-gnu-gcc
-      
+
 
       - name: Download GCC source code
         run: |
